@@ -1,103 +1,224 @@
-import Image from "next/image";
+"use client"; 
+import EventCard from '@/components/eventos/EventCard';
+import HeroSection from '@/components/home/HeroSection';
+import Navigation from '@/components/layout/Navigation';
+import ProjectCard from '@/components/projetos/ProjectCard';
+import React, { useState } from 'react';
 
-export default function Home() {
+
+// Dados de exemplo para demonstração
+const projetos = [
+  {
+    id: '1',
+    titulo: 'Semana da Computação 2024',
+    descricao: 'Evento anual que reúne estudantes, professores e profissionais da área de computação para palestras, workshops e networking.',
+    categoria: 'Evento',
+    status: 'Em andamento' as const,
+    participantes: 150
+  },
+  {
+    id: '2',
+    titulo: 'Projeto Inclusão Digital',
+    descricao: 'Iniciativa para levar conhecimento de informática básica para comunidades carentes de São Luís.',
+    categoria: 'Social',
+    status: 'Ativo' as const,
+    participantes: 25
+  },
+  {
+    id: '3',
+    titulo: 'Hackathon UFMA',
+    descricao: 'Competição de programação que desafia estudantes a desenvolver soluções inovadoras em 48 horas.',
+    categoria: 'Competição',
+    status: 'Concluído' as const,
+    participantes: 80
+  }
+];
+
+const eventos = [
+  {
+    id: '1',
+    titulo: 'Workshop de React.js',
+    data: '15 de Julho, 2024',
+    horario: '14:00 - 17:00',
+    local: 'Laboratório de Informática - CCET',
+    vagas: 30,
+    inscritos: 28
+  },
+  {
+    id: '2',
+    titulo: 'Palestra: Inteligência Artificial',
+    data: '22 de Julho, 2024',
+    horario: '19:00 - 21:00',
+    local: 'Auditório Central - UFMA',
+    vagas: 100,
+    inscritos: 45
+  },
+  {
+    id: '3',
+    titulo: 'Mesa Redonda: Mercado de TI',
+    data: '29 de Julho, 2024',
+    horario: '16:00 - 18:00',
+    local: 'Sala de Conferências - CCET',
+    vagas: 50,
+    inscritos: 50
+  }
+];
+
+const App: React.FC = () => {
+  const [activeSection, setActiveSection] = useState<string>('home');
+
+  const handleSectionChange = (section: string): void => {
+    setActiveSection(section);
+  };
+
+  const handleProjectDetails = (projeto: typeof projetos[0]): void => {
+    alert(`Detalhes do projeto: ${projeto.titulo}`);
+  };
+
+  const handleEventRegister = (evento: typeof eventos[0]): void => {
+    alert(`Inscrição no evento: ${evento.titulo}`);
+  };
+
+  const renderContent = () => {
+    switch (activeSection) {
+      case 'home':
+        return (
+          <div className="space-y-8">
+            <HeroSection onNavigate={handleSectionChange} />
+            
+            {/* Seção de Projetos em Destaque */}
+            <section>
+              <h2 className="text-3xl font-bold text-gray-800 mb-6">Projetos em Destaque</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {projetos.slice(0, 3).map((projeto) => (
+                  <ProjectCard
+                    key={projeto.id}
+                    projeto={projeto}
+                    onViewDetails={handleProjectDetails}
+                  />
+                ))}
+              </div>
+            </section>
+
+            {/* Seção de Próximos Eventos */}
+            <section>
+              <h2 className="text-3xl font-bold text-gray-800 mb-6">Próximos Eventos</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {eventos.slice(0, 3).map((evento) => (
+                  <EventCard
+                    key={evento.id}
+                    evento={evento}
+                    onRegister={handleEventRegister}
+                  />
+                ))}
+              </div>
+            </section>
+          </div>
+        );
+
+      case 'projetos':
+        return (
+          <div className="space-y-8">
+            <div className="text-center">
+              <h1 className="text-4xl font-bold text-gray-800 mb-4">Projetos & Ações</h1>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Conheça as iniciativas do Diretório Acadêmico de Computação da UFMA
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {projetos.map((projeto) => (
+                <ProjectCard
+                  key={projeto.id}
+                  projeto={projeto}
+                  onViewDetails={handleProjectDetails}
+                />
+              ))}
+            </div>
+          </div>
+        );
+
+      case 'eventos':
+        return (
+          <div className="space-y-8">
+            <div className="text-center">
+              <h1 className="text-4xl font-bold text-gray-800 mb-4">Eventos</h1>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Participe dos nossos eventos e atividades acadêmicas
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {eventos.map((evento) => (
+                <EventCard
+                  key={evento.id}
+                  evento={evento}
+                  onRegister={handleEventRegister}
+                />
+              ))}
+            </div>
+          </div>
+        );
+
+      case 'membros':
+        return (
+          <div className="text-center py-16">
+            <h1 className="text-4xl font-bold text-gray-800 mb-4">Membros da Diretoria</h1>
+            <p className="text-xl text-gray-600">Seção em desenvolvimento...</p>
+          </div>
+        );
+
+      case 'denuncia':
+        return (
+          <div className="text-center py-16">
+            <h1 className="text-4xl font-bold text-gray-800 mb-4">Canal de Denúncias</h1>
+            <p className="text-xl text-gray-600">Seção em desenvolvimento...</p>
+          </div>
+        );
+
+      case 'loja':
+        return (
+          <div className="text-center py-16">
+            <h1 className="text-4xl font-bold text-gray-800 mb-4">Loja do DA</h1>
+            <p className="text-xl text-gray-600">Seção em desenvolvimento...</p>
+          </div>
+        );
+
+      default:
+        return (
+          <div className="text-center py-16">
+            <h1 className="text-4xl font-bold text-gray-800 mb-4">Página não encontrada</h1>
+            <p className="text-xl text-gray-600">A seção solicitada não existe.</p>
+          </div>
+        );
+    }
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+    <div className="min-h-screen bg-gray-50">
+      <Navigation 
+        activeSection={activeSection} 
+        onSectionChange={handleSectionChange} 
+      />
+      
+      <main className="max-w-7xl mx-auto px-6 py-8">
+        {renderContent()}
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      
+      {/* Footer */}
+      <footer className="bg-gray-800 text-white py-8 mt-16">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <div className="mb-4">
+            <h3 className="text-xl font-bold">Diretório Acadêmico de Computação</h3>
+            <p className="text-gray-300">Universidade Federal do Maranhão</p>
+          </div>
+          <div className="text-sm text-gray-400">
+            <p>&copy; 2024 DA Computação UFMA. Todos os direitos reservados.</p>
+          </div>
+        </div>
       </footer>
     </div>
   );
-}
+};
+
+export default App;
